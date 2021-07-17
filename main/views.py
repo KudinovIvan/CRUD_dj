@@ -5,25 +5,33 @@ from django.contrib.auth import authenticate
 
 def index(request):
 	type_of = request.GET.get('action', 'none')
+	login = request.GET.get('login', 'none')
+	password = request.GET.get('password', 'none')
+	repass = request.GET.get('repass', 'none')
+	mail = request.GET.get('mail', 'none')
+	mail = mail.replace('%40', '@')
 	if (type_of == 'signin'):
-		login = request.GET.get('login', 'none')
-		password = request.GET.get('password', 'none')
 		user = authenticate(username=login, password=password) 
 		if user is not None:
 			return HttpResponseRedirect('signin/')
 		else:
-			print("NOT AUTH")
+			return HttpResponseRedirect('/?error=#error_signin')
 	elif (type_of == 'signup'):
-		login = request.GET.get('login', 'none')
-		password = request.GET.get('password', 'none')
-		repass = request.GET.get('repass', 'none')
-		mail = request.GET.get('mail', 'none')
-		mail = mail.replace('%40', '@')
-		if (repass == password):
-			user = User.objects.create_user(login, mail, password)
-		return HttpResponseRedirect('signup/')
+		user = authenticate(username=login, password=password)
+		if user is not None:
+			return HttpResponseRedirect('/?error=#error_signup')
+		else:
+			if (repass == password):
+				user = User.objects.create_user(login, mail, password)
+				return HttpResponseRedirect('/?success=#success_up')
+			else:
+				return HttpResponseRedirect('?error=#error_signup_password')
 	elif (type_of == 'reset'):
-		return HttpResponseRedirect('reset/')
+		user = User.objects.get(username=login)
+		if user is not None:
+			return HttpResponseRedirect('reset/')
+		else:
+			return HttpResponseRedirect('/?error=#error_reset')
 	return render(request,'main/index.html')
 
 def app(request):
