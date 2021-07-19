@@ -2,6 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from main import apps
+
 
 def index(request):
 	type_of = request.GET.get('action', 'none')
@@ -34,13 +38,9 @@ def index(request):
 			return HttpResponseRedirect('/?error=#error_reset')
 	return render(request,'main/index.html')
 
-def app(request):
-	name = request.GET.get('name', 'none')
-	return HttpResponse('<h1>App<h1><h3>{0}<h3>'.format(name))
-
 def signin(request):
-	answer = '<h1>Signin</h1>'
-	return HttpResponse(answer)
+	apps.find_city('',1)
+	return render(request, 'main/cities.html')
 
 def signup(request):
 	answer = '<h1>Signup</h1>'
@@ -50,8 +50,9 @@ def reset(request):
 	answer = '<h1>Reset</h1>'
 	return HttpResponse(answer)
 
-def red(request):
-	return HttpResponseRedirect('/app?name=REDIRECT')
+@csrf_exempt
+def player(request):
+	message = request.POST.get('data')
+	response = apps.find_city(message,0)
+	return JsonResponse({'data': response})
 
-def perm(request):
-	return HttpResponsePermanentRedirect('/app?name=PERMANENT')

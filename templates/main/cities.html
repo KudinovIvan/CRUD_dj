@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'main/style/style.css' %}">
+	<script type="text/javascript" src="{% static 'main/script/brython.js' %}">
+	</script>
+	<script type="text/javascript" src="{% static 'main/script/brython_stdlib.js' %}">
+	</script>
+	<title>Authorization</title>
+</head>
+<body onload="brython()">
+	<form class = "cities" method="GET">
+    	<div class="chat-box-header">
+	      Bot
+	   	</div>
+	   	<div class="chat-box-body">
+    		<div class="chat-box-overlay">   
+
+	      	</div>
+	      	<div style="display: grid;" id="chat-logs" class="chat-logs">
+	     	</div>
+	    </div>
+	</form>
+	<div id="wrapper_cities">
+		<input class="input_text" id="chat_input" type="text">
+		<button id="chat-submit" type="submit">
+			<span>
+			Send
+			</span>
+		</button>
+	</div>
+	<script type="text/python" src="{% static 'main/script/script.py' %}">	
+	</script>
+	</script>
+</body>
+</html>
