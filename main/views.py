@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from main import apps
 
-
+req = 0
 def index(request):
 	type_of = request.GET.get('action', 'none')
 	login = request.GET.get('login', 'none')
@@ -17,7 +17,7 @@ def index(request):
 	if (type_of == 'signin'):
 		user = authenticate(username=login, password=password) 
 		if user is not None:
-			return HttpResponseRedirect('signin/')
+			return HttpResponseRedirect('cities/')
 		else:
 			return HttpResponseRedirect('/?error=#error_signin')
 	elif (type_of == 'signup'):
@@ -38,8 +38,9 @@ def index(request):
 			return HttpResponseRedirect('/?error=#error_reset')
 	return render(request,'main/index.html')
 
-def signin(request):
-	apps.find_city('',1)
+def cities(request):
+	global req
+	req = apps.Request()
 	return render(request, 'main/cities.html')
 
 def signup(request):
@@ -50,9 +51,14 @@ def reset(request):
 	answer = '<h1>Reset</h1>'
 	return HttpResponse(answer)
 
+def detect(request):
+	return render(request, 'main/detect.html')
+
 @csrf_exempt
 def player(request):
+	global req
 	message = request.POST.get('data')
-	response = apps.find_city(message,0)
+	response = req.find_city(message,0)
+	apps.talk(response)
 	return JsonResponse({'data': response})
 

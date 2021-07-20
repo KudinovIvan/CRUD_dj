@@ -5,8 +5,9 @@ from main import views
 
 urlpatterns = [
     path('', views.index),
-    path('signin/', views.signin),
+    path('cities/', views.cities),
+    path('detect/', views.detect),
     path('signup/', views.signup),
     path('admin/', admin.site.urls),
-    path('signin/response-city/', views.player, name='response-city'),
+    path('cities/response-city/', views.player, name='response-city'),
 ]

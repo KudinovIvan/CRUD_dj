@@ -1,4 +1,4 @@
-from browser import document, bind, ajax, html, console
+from browser import document, bind, ajax, html
 import json
 
 @bind('#chat-submit', 'click')
@@ -20,3 +20,4 @@ def complete(request):
 	data = json.loads(request.responseText)
 	answer = data['data']
 	chat <= html.DIV(answer, style=dict(height='fit-content'), Class='cm-msg-text')
+	document.select('.input_text')[0].value = ''
